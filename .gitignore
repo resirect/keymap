@@ -1,0 +1,15 @@
+/target
+*.swp
+*~
+.idea/
+.vscode/
+# Local screenshots and real configs never belong in the repository.
+/screenshots/
+*.local.kdl
+# Editor, OS and merge leftovers.
+.DS_Store
+*.orig
+*.rej
+# Secrets and local environment files never belong in the repository.
+.env
+.env.*

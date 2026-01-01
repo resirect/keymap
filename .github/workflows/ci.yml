@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# The job only reads the repository; it publishes nothing.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    # Arch provides current GTK 4 and gtk4-layer-shell.
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm --needed base-devel git rust gtk4 gtk4-layer-shell libxkbcommon xkeyboard-config
+      - uses: actions/checkout@v7
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Tests
+        # Integration tests that need `niri` skip themselves when it is absent.
+        run: cargo test --workspace --locked
+      - name: Example configs are valid KDL for Keymap
+        run: cargo run --locked -p keymap --bin keymap -- check --config examples/configs/basic/config.kdl

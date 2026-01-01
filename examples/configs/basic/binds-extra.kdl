@@ -1,0 +1,10 @@
+// Included after the main binds block.
+binds {
+    // Overrides Mod+E from config.kdl (same key, later section wins).
+    Mod+E { spawn "librewolf"; }
+    // Same runtime combination as Mod+Q (Mod resolves to Super); Niri uses
+    // the first match, so this declaration never fires.
+    Super+Q { spawn "never-runs"; }
+}
+
+include "nested/apps.kdl"

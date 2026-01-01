@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Keymap
+GenericName=Keyboard shortcuts
+Comment=View and edit Niri keyboard shortcuts on a glass keyboard
+Exec=keymap toggle
+Icon=preferences-desktop-keyboard-shortcuts
+Terminal=false
+Categories=Settings;DesktopSettings;
+Keywords=niri;shortcut;keybinding;hotkey;keyboard;
+StartupNotify=false

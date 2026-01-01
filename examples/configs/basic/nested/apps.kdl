@@ -1,0 +1,4 @@
+binds {
+    Mod+Return { spawn "foot"; }
+    Mod+Shift+T { spawn "alacritty"; }
+}

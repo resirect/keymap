@@ -1,0 +1,15 @@
+// Example: open/close Keymap with Mod+Shift+M (Super+Shift+M), the default.
+//
+// `keymap shortcut set` adds this for you (validated, backed up, undoable) and
+// refuses if Mod+Shift+M is already used. To paste it yourself, run
+// `keymap check` first: it tells you whether Mod+Shift+M is free and suggests
+// another combination if it is not. Put the line in an existing `binds { }`
+// block; do not replace a bind that is already there.
+//
+// allow-inhibiting=false keeps this bind working while Keymap's overlay is
+// open (the overlay inhibits all other compositor shortcuts so your keys
+// reach Keymap), so the same combination also closes it. repeat=false keeps a
+// held shortcut from toggling the overlay repeatedly.
+binds {
+    Mod+Shift+M repeat=false allow-inhibiting=false hotkey-overlay-title="Keymap: edit shortcuts" { spawn "keymap" "toggle"; }
+}

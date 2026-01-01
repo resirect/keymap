@@ -1,0 +1,19 @@
+// Keymap: blur the real windows behind Keymap's overlay, and nothing else.
+// Matches only the "keymap" layer namespace; other surfaces are unaffected.
+// Non-xray effects are experimental in Niri 26.04 (they can briefly
+// disappear during some animations).
+//
+// Requires Niri 26.04 or newer. Blur strength follows your global `blur { }`
+// settings; this rule does not change them. If your config has `blur { off }`
+// nothing is blurred and Keymap falls back to dimming.
+//
+// Keymap can append this rule for you (Settings → Background → "Add blur rule
+// to Niri config"); the change is validated, backed up and undoable like any
+// other edit. `keymap blur-rule` prints the same text.
+layer-rule {
+    match namespace="^keymap$"
+    background-effect {
+        blur true
+        xray false
+    }
+}

@@ -1,0 +1,61 @@
+// Synthetic Niri configuration used by Keymap's tests and demo mode.
+// It is not anyone's real setup.
+input {
+    keyboard {
+        xkb {
+            layout "us,de"
+            options "grp:caps_toggle"
+        }
+    }
+    mod-key "Super"
+}
+
+layout {
+    gaps 12 // an unrelated setting that must survive edits byte for byte
+}
+
+/-window-rule {
+    match app-id="disabled-example"
+}
+
+binds {
+    // Applications
+    Mod+T hotkey-overlay-title="Open terminal" { spawn "foot"; }
+    Ctrl+Alt+T { spawn "foot"; }
+    Mod+E hotkey-overlay-title="Open browser" { spawn "firefox"; }
+    Mod+Shift+E { spawn "firefox" "--private-window"; }
+    Mod+Space repeat=false { spawn-sh r#"fuzzel --prompt "Run: ""#; }
+
+    // Screenshots
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window write-to-disk=false; }
+
+    // Windows and workspaces
+    Mod+Q { close-window; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Page_Down { focus-workspace-down; }
+    Mod+Page_Up { focus-workspace-up; }
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+O repeat=false { toggle-overview; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+KP_Add { set-column-width "+10%"; }
+
+    // Media keys work without modifiers and while locked.
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"; }
+
+    // Pointer bindings are preserved but not edited by Keymap.
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+
+    /-Mod+D { spawn "disabled-example"; }
+}
+
+include "binds-extra.kdl"
+include optional=true "missing-optional.kdl"

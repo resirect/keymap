@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["crates/keymap-core", "crates/keymap-app"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "CC0-1.0"
+
+[profile.release]
+lto = "thin"
+strip = true
