@@ -4,8 +4,7 @@
 
 use std::path::{Path, PathBuf};
 
-/// Whole ripple on the first visible opening of a desktop session: the
-/// 220 ms preview slowed 10× and played 1.5× faster (2.2 s / 1.5).
+/// Whole ripple on the first visible opening of a desktop session (~1.47 s).
 pub const FIRST_OPEN_SECS: f64 = 2.2 / 1.5;
 /// Every later opening in the same session: exactly twice as fast.
 pub const LATER_OPEN_SECS: f64 = FIRST_OPEN_SECS / 2.0;

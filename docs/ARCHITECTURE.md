@@ -104,9 +104,8 @@ Keymap does not depend on any desktop shell. All logic lives in the UI-agnostic
   at most 1.5 s. A show during the warm-up waits for it, and a cold `show`
   (no preload, e.g. the first toggle after `quit`) runs the warm-up first,
   opening ~0.4 s later but smoothly; a hide meanwhile drops the pending show.
-  This does the first layout, GL
-  shader compilation and glyph uploads, which otherwise froze the first
-  opening's ripple for ~300 ms (worst frame gap now ~30–40 ms).
+  This does the first layout, GL shader compilation and glyph uploads ahead
+  of time, so they don't stall the first opening's ripple.
   `KEYMAP_NO_WARMUP=1` skips it. `show` maps it on the focused output (moving it first if
   that output changed) and `hide` unmaps it: with no mapped surface there is no
   blur, dimming, input capture or drawing, and the widgets stay built. The

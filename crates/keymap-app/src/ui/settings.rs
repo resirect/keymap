@@ -265,7 +265,7 @@ pub fn build(ui: &Rc<Ui>) -> gtk::Box {
         }
         body.append(&row);
         let mut note = String::from(
-            "Sets passes and offset in Niri's blur section. That section is global, so this also changes blur for anything else that uses it. Each change is validated and can be undone in History.",
+            "Sets passes and offset in Niri's blur section. That section is global, so this also changes blur for anything else that uses it. Each change is validated and can be undone in Recent changes.",
         );
         if current.is_none() {
             note.insert_str(0, "Your config uses custom blur values. ");

@@ -390,8 +390,8 @@ const ROWS_PER_FRAME: u32 = 12;
 
 /// Give the list its rows once it has a size, a few per frame. GTK's list
 /// view creates a widget for every item of a list this short (it keeps up to
-/// 200), and styling and measuring ~150 action rows costs about 300 ms here;
-/// done at once, that would stall input for a frame that long. Growing the
+/// 200), and styling and measuring ~150 action rows at once would stall
+/// input for one long frame. Growing the
 /// list over consecutive frames keeps every frame short. The kept panel is
 /// filled in the background (see `Ui::warm_panels`), so this normally finishes
 /// before the browser is opened; a search shows every match at once.

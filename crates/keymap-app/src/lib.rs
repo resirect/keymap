@@ -45,13 +45,12 @@ Options:
 pub struct Options {
     pub config: Option<PathBuf>,
     pub demo: bool,
-    pub resident: bool,
 }
 
 /// Parse the command line into options and the command (default `show`).
 pub fn parse_args() -> (Options, String) {
     let mut args = std::env::args().skip(1);
-    let mut opts = Options { config: None, demo: false, resident: false };
+    let mut opts = Options { config: None, demo: false };
     let mut command = None;
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -60,8 +59,6 @@ pub fn parse_args() -> (Options, String) {
                 std::process::exit(0);
             }
             "--demo" => opts.demo = true,
-            // Kept for older launch lines: Keymap is always resident now.
-            "--resident" => opts.resident = true,
             "--config" => match args.next() {
                 Some(p) => opts.config = Some(PathBuf::from(p)),
                 None => die("--config needs a path"),
@@ -95,10 +92,8 @@ pub fn deliver(cmd: instance::Command, opts: &Options) -> Option<instance::Comma
     use instance::Command;
     match instance::send(cmd, opts.demo) {
         Ok(true) => None,
-        // Nothing running. Older startup lines used `keymap --resident hide`
-        // to start hidden; plain hide and quit have nothing to do.
+        // Nothing running: plain hide and quit have nothing to do.
         Ok(false) => match cmd {
-            Command::Hide if opts.resident => Some(Command::Preload),
             Command::Hide | Command::Quit => None,
             c => Some(c),
         },

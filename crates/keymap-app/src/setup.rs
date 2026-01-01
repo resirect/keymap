@@ -850,7 +850,7 @@ mod tests {
     #[test]
     fn disabling_removes_only_keymap_entries_in_any_form() {
         let text = format!(
-            "{USER}spawn-sh-at-startup \"keymap preload\"\nspawn-at-startup \"/home/u/.local/bin/keymap\" \"--resident\" \"hide\"\n/-spawn-at-startup \"keymap\" \"preload\"\n"
+            "{USER}spawn-sh-at-startup \"keymap preload\"\nspawn-at-startup \"/home/u/.local/bin/keymap\" \"preload\"\n/-spawn-at-startup \"keymap\" \"preload\"\n"
         );
         let (_t, m) = model(&text);
         assert_eq!(startup_entries(&m).len(), 2, "commented-out entries are not running ones");
