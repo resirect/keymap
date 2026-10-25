@@ -8,6 +8,9 @@ compositor. It reads and edits Niri's own configuration file.
 
 ![Keymap open over two blurred windows. Super is selected, and the keys that form a shortcut with Super have a mint outline.](docs/images/keymap.png)
 
+> [!NOTE]
+> Keymap is vibecoded: it was written with the help of AI.
+
 ## Features
 
 - Shows which keys take part in a shortcut, and what each combination does,
