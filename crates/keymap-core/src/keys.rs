@@ -30,6 +30,10 @@ impl Mods {
     pub fn is_empty(self) -> bool {
         self.0 == 0
     }
+    /// How many modifier keys are held (`Mod` counts as one).
+    pub fn count(self) -> u32 {
+        self.0.count_ones()
+    }
     pub fn with(self, o: Mods) -> Mods {
         Mods(self.0 | o.0)
     }

@@ -359,17 +359,17 @@ fn show_tip(ui: &Rc<Ui>, evdev: u32, key: &gtk::Widget) {
             let current = st.model.effective_for(c).and_then(|b| st.model.action_of(b)).map(|a| a.name.clone());
             tip.append(&row(&format!("{}: {}", c.label(), current.as_deref().unwrap_or("unassigned")), current.is_none()));
         }
-        let mut others: Vec<(String, String)> = st
+        let mut others: Vec<(&Combo, String)> = st
             .model
             .effective
             .iter()
             .filter(|(c, _)| c.trigger == Trigger::Keysym(sym) && Some(*c) != combo.as_ref())
-            .filter_map(|(c, b)| st.model.action_of(&st.model.bindings[*b]).map(|a| (c.label(), a.name.clone())))
+            .filter_map(|(c, b)| st.model.action_of(&st.model.bindings[*b]).map(|a| (c, a.name.clone())))
             .collect();
-        others.sort();
+        others.sort_by_cached_key(|(c, _)| shortest_first(c));
         let more = others.len().saturating_sub(6);
         for (c, a) in others.into_iter().take(6) {
-            tip.append(&row(&format!("{c}: {a}"), false));
+            tip.append(&row(&format!("{}: {a}", c.label()), false));
         }
         if more > 0 {
             tip.append(&row(&format!("and {more} more"), true));
@@ -391,6 +391,12 @@ fn show_tip(ui: &Rc<Ui>, evdev: u32, key: &gtk::Widget) {
     tip.set_margin_start(x.max(8.0) as i32);
     tip.set_margin_top(y.max(8.0) as i32);
     tip.set_visible(true);
+}
+
+/// Sort key for a key's shortcuts: fewest modifiers first, so the shortest
+/// ones are at the top (and survive the cut-off); equal lengths by name.
+fn shortest_first(c: &Combo) -> (u32, String) {
+    (c.mods.count(), c.label())
 }
 
 /// "Super+Shift" style label for the selected modifiers.
@@ -418,5 +424,26 @@ mod tests {
         let big = unit(FormFactor::Full, 0.9);
         assert!(big < unit(FormFactor::SeventyFive, 0.9));
         assert!(geometry::layout(FormFactor::Full).width * big <= 1920.0 * 0.96 + 1e-9);
+    }
+
+    #[test]
+    fn hover_list_puts_the_shortest_shortcuts_first() {
+        let m = |mods: &[Mods]| Combo { mods: mods.iter().fold(Mods::empty(), |a, b| a.with(*b)), trigger: Trigger::Keysym(0x6d) };
+        let mut combos = [
+            m(&[Mods::CTRL, Mods::SHIFT, Mods::ALT, Mods::SUPER]),
+            m(&[Mods::SUPER, Mods::CTRL]),
+            m(&[Mods::ALT]),
+            m(&[Mods::SUPER, Mods::SHIFT, Mods::CTRL]),
+            m(&[]),
+            m(&[Mods::SUPER, Mods::SHIFT]),
+            m(&[Mods::CTRL]),
+            m(&[Mods::LEVEL3, Mods::SHIFT]),
+        ];
+        combos.sort_by_cached_key(shortest_first);
+        let counts: Vec<u32> = combos.iter().map(|c| c.mods.count()).collect();
+        assert_eq!(counts, [0, 1, 1, 2, 2, 2, 3, 4]);
+        // Equal lengths keep a stable, readable order.
+        let labels: Vec<String> = combos.iter().map(Combo::label).collect();
+        assert_eq!(labels[1..3], ["Alt + M", "Ctrl + M"]);
     }
 }
